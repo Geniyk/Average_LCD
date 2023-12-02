@@ -1,0 +1,56 @@
+#include <LiquidCrystal.h>
+
+int rs = 12, en = 11, D4 = 5, D5 = 4, D6 = 3, D7 = 2;
+LiquidCrystal lcd(rs, en, D4, D5, D6, D7);
+String n1, n2;
+float average;
+
+void setup() {
+  lcd.begin(16, 2);
+  Serial.begin(9600);
+}
+
+void loop() {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Input number 1:");
+  while (Serial.available() == 0) {}
+  n1 = Serial.readString();
+  lcd.setCursor(0, 1);
+  lcd.print(n1);
+  delay(1000);
+
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Input number 2:");
+  while (Serial.available() == 0) {}
+  n2 = Serial.readString();
+  lcd.setCursor(0, 1);
+  lcd.print(n2);
+  delay(1000);
+
+  // Calculate the average
+  average = (n1.toFloat() + n2.toFloat()) / 2.0;
+
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Average is:");
+
+  // Print n1, n2, and average scrolling
+  for (int i = 0; i < 16; ++i) {
+    lcd.clear();
+    lcd.setCursor(i, 1);
+    lcd.print(n1);
+    lcd.setCursor(i + 8, 1);
+    lcd.print(n2);
+    lcd.setCursor(i + 12, 0);
+    lcd.print(average, 1); // Display average with 1 decimal place
+    delay(500);
+  }
+
+  lcd.clear();
+  lcd.setCursor(0, 1);
+  lcd.print("Avg: ");
+  lcd.print(average, 1); // Display average with 1 decimal place
+  delay(500);
+}
